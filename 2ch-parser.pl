@@ -1,19 +1,19 @@
 #!/usr/bin/perl
 use strict;
 use feature 'say';
-use utf8;
 
 BEGIN { push @INC, '.' }
-use alphadumper;
+#use alphadumper;
 
 use JSON;
 use DateTime;
+use XML::RSS;
 
-
-my $content = `curl 'https://2ch.hk/news/catalog.json'`
+my $content = `curl --silent 'https://2ch.hk/news/catalog.json'`
     or die "Empty curl output";
 
-my $json = eval { JSON::decode_json($content) };
+#my $json = eval { JSON::decode_json( $content ) };
+my $json = eval { JSON->new->utf8->decode( $content ) };
 die "Error parsing 2ch response: $@" if $@;
 die "No threads found" unless $json->{threads}->@*;
 
@@ -38,13 +38,40 @@ grep {
 
 # TODO suggested_source
 
+
+my $rss = XML::RSS->new(
+    version => '2.0',
+    #encode_output => 0,
+);
+$rss->channel(
+    title => '2ch hot news',
+    link => 'http://2ch.hk/news',
+	pubDate	=> DateTime->now,
+    lastBuildDate => DateTime->now,
+);
+
 binmode STDOUT, ":utf8";
 for ( @hot_threads ) {
-    say "-------------------------------------------------";
-    say "Url: $_->{url}";
-    say "Date: ".$_->{dt}->datetime(' ');
-    say "Title: $_->{title}";
-    say "Text: ".substr($_->{text}, 0, 250);
-    say "Comments: $_->{comments}";
-    say "Views: $_->{views}";
+    #say "-------------------------------------------------";
+    #say "Url: $_->{url}";
+    #say "Date: ".$_->{dt}->datetime(' ');
+    #say "Title: $_->{title}";
+    #say "Text: ".substr($_->{text}, 0, 250);
+    #say "Comments: $_->{comments}";
+    #say "Views: $_->{views}";
+
+    $rss->add_item(
+        permaLink => $_->{url},
+        title => sprintf(
+            "Comments: %03d Views: %05s Title: %s",
+            $_->{comments},
+            $_->{views},
+            $_->{title}
+        ),
+        pubDate => $_->{dt},
+        description => $_->{text},
+    );
 }
+
+#$rss->save('2ch-hot-news.rdf');
+say $rss->as_string; # for newsboat
