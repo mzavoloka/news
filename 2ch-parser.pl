@@ -9,7 +9,11 @@ use JSON;
 use DateTime;
 use XML::RSS;
 
-my $content = `curl --silent 'https://2ch.hk/news/catalog.json'`
+my $domen;
+$domen = '2ch.life';
+$domen = '2ch.hk';
+
+my $content = `curl --silent 'https://$domen/news/catalog.json'`
     or die "Empty curl output";
 
 #my $json = eval { JSON::decode_json( $content ) };
@@ -22,18 +26,20 @@ sort { $b->{ts} <=> $a->{ts} }
 map {
     {
         id    => $_->{num},
-        url   => "https://2ch.hk/news/res/$_->{num}.html",
+        url   => "https://$domen/news/res/$_->{num}.html",
         ts    => $_->{timestamp},
         dt    => DateTime->from_epoch($_->{timestamp}),
         title => $_->{subject},
         text  => $_->{comment},
         views => $_->{views},
         comments => $_->{posts_count},
+        files => [ map { "https://$domen/$_->{path}" } $_->{files}->@* ],
     }
 }
 grep {
     not $_->{closed}
-    and ( $_->{posts_count} >= 30 or $_->{views} >= 1000 )
+    and ( $_->{posts_count} >= 50 and $_->{views} >= 2000
+          or $_->{views} >= 2300 )
 } $json->{threads}->@*;
 
 # TODO suggested_source
@@ -45,7 +51,7 @@ my $rss = XML::RSS->new(
 );
 $rss->channel(
     title => '2ch hot news',
-    link => 'http://2ch.hk/news',
+    link => "https://$domen/news",
 	pubDate	=> DateTime->now,
     lastBuildDate => DateTime->now,
 );
@@ -69,7 +75,8 @@ for ( @hot_threads ) {
             $_->{title}
         ),
         pubDate => $_->{dt},
-        description => $_->{text},
+        description => $_->{text}.
+            "<br><br>Files:".join( '', map { "<br><a href='$_'>$_</a>" } $_->{files}->@* ),
     );
 }
 
