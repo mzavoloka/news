@@ -1,0 +1,64 @@
+<html>
+<meta charset="UTF-8"/>
+<meta http-equiv="refresh" content="30" />
+<head>
+    <title>Все новости</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- Telegram messages styles -->
+    <link href="//telegram.org/css/font-roboto.css?1" rel="stylesheet" type="text/css">
+    <link href="//telegram.org/css/widget-frame.css?66" rel="stylesheet" media="screen">
+    <link href="//telegram.org/css/telegram-web.css?37" rel="stylesheet" media="screen">
+
+</head>
+<body>
+  <table width="100%" style="table-layout:fixed;">
+    <tr>
+      <td width="300" align="left" valign="top">
+        <h1><TMPL_VAR NAME=SL></h1>
+        <TMPL_LOOP NAME=SL_NEWS>
+          <h4>Date: <TMPL_VAR NAME=HDATE>
+            Author: <TMPL_VAR NAME=AUTHOR>
+            Title: <TMPL_VAR NAME=TITLE>
+            Url: <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></h4>
+          <p><TMPL_VAR NAME=CONTENT></p>
+        </TMPL_LOOP>
+      </td>
+      <td width="300" align="left" valign="top">
+        <h1><TMPL_VAR NAME=TG></h1>
+        <TMPL_LOOP NAME=TG_NEWS>
+          <h4>Date: <TMPL_VAR NAME=HDATE>
+            Author: <TMPL_VAR NAME=AUTHOR>
+            Title: <TMPL_VAR NAME=TITLE>
+            Url: <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></h4>
+          <p><TMPL_VAR NAME=CONTENT></p>
+        </TMPL_LOOP>
+      </td>
+      <td width="300" align="left" valign="top">
+        <h1><TMPL_VAR NAME=YT></h1>
+        <TMPL_LOOP NAME=YT_NEWS>
+          <p><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></br>
+          <TMPL_VAR NAME=AUTHOR> -- <TMPL_VAR NAME=TITLE></p>
+          <p style="display: none;"><TMPL_VAR NAME=CONTENT></p>
+        </TMPL_LOOP>
+      </td>
+      <td width="300" align="left" valign="top">
+        <h1><TMPL_VAR NAME=OT></h1>
+        <TMPL_LOOP NAME=OT_NEWS>
+          <p><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></br>
+          <TMPL_VAR NAME=AUTHOR> -- <TMPL_VAR NAME=TITLE></p>
+          <p><TMPL_VAR NAME=CONTENT></p>
+        </TMPL_LOOP>
+      </td>
+      <!--
+      <td width="300" align="left" valign="top">
+        <h1><TMPL_VAR NAME=RB></h1>
+        <TMPL_LOOP NAME=RB_NEWS>
+          <p><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></br>
+          <TMPL_VAR NAME=AUTHOR> -- <TMPL_VAR NAME=TITLE></p>
+          <p><TMPL_VAR NAME=CONTENT></p>
+        </TMPL_LOOP>
+      </td>-->
+    </tr>
+  </table>
+</body>
