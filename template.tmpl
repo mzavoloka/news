@@ -16,63 +16,110 @@ body {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1350px 600px 570px;
+  grid-template-rows: 130px max-content;
   gap: 3px;
+}
+
+.tg {
+  /* outer grid (wrapper) rules */
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  /*grid-column: 1 / 2;
+  grid-row: 1 / 2*/
+  /* inner grid rules */
+  display: grid;
+  grid-template-columns: repeat(3, 450px);
+  /*grid-template-rows: repeat(1, 400px);*/
+  /*grid-template-rows: 200px;*/
+  /*grid-auto-rows: 400px;*/
+  align-self: start;
+}
+/*.tg:hover {
+}*/
+.tgme_widget_message_bubble {
+  margin: 0;
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.tgitem {
+  overflow: clip;
+  max-height: 500px;
+}
+.tgitem:hover {
+  overflow: visible;
+  max-height: none;
 }
 
 .yt {
   /* outer grid (wrapper) rules */
-  grid-column: 1 / 4;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  max-width: 1200px;
+  /*grid-column: 3 / 4;
+  grid-row: 1;*/
   /* inner grid rules */
   display: grid;
   grid-template-columns: repeat(22, 200px);
-  grid-template-rows: repeat(1, 150px);
+  grid-template-rows: repeat(1, 130px);
+  overflow: clip;
 }
 .yt div.ytitem {
   padding: 5px;
   margin: 5px;
   margin-bottom: 10px;
   background-color: white;
-}
-
-.tg {
-  /* outer grid (wrapper) rules */
-  grid-column: 1 / 2;
-  /* inner grid rules */
-  display: grid;
-  grid-template-columns: repeat(3, 450px);
-  /*grid-template-rows: repeat(1, 400px);*/
-  align-self: start;
-}
-.tgme_widget_message_bubble {
-  margin: 0;
-  margin-right: 5px;
-  margin-bottom: 10px;
+  overflow: clip;
 }
 
 .sl {
   /* outer grid (wrapper) rules */
-  grid-column: 3 / 3;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  /*grid-column: 3 / 3;
+  grid-row: 2;*/
   /* inner grid rules */
   /*display: grid;
   grid-template-columns: repeat(22, 200px);
   grid-template-rows: repeat(1, 150px);*/
+  overflow: clip;
 }
 .sl img {
-  max-width: 500px;
+  max-width: 600px;
 }
-.sl div.slitem {
+.slitem {
   /*border: 1px solid black;*/
   padding: 5px;
   margin: 5px;
   margin-bottom: 10px;
   /*background-color: beige;*/
   background-color: white;
+  max-height: 675px;
+  /*max-width: 600px;*/
+  overflow: clip;
+}
+
+.slitem:hover {
+  overflow: visible;
+  max-height: none;
 }
 
 .ot {
   /* outer grid (wrapper) rules */
-  grid-column: 4 / 4;
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  /*max-width: 600px;*/
+  /*grid-column: 4 / 4;
+  grid-row: 2;*/
   /* inner grid rules */
   /*display: grid;
   grid-template-columns: repeat(22, 200px);
@@ -90,6 +137,13 @@ body {
 </head>
 <body>
   <div class="wrapper">
+    <div class="tg">
+      <h4 style="display: none;"><TMPL_VAR NAME=TG></h4>
+      <TMPL_LOOP NAME=TG_NEWS>
+      <div class="tgitem"><TMPL_VAR NAME=CONTENT></div>
+      <p style="display: none;"><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></p>
+      </TMPL_LOOP>
+    </div>
     <div class="yt">
       <h4 style="display: none;"><TMPL_VAR NAME=YT></h4>
       <TMPL_LOOP NAME=YT_NEWS>
@@ -97,13 +151,6 @@ body {
           <small><a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a><TMPL_VAR NAME=HDATE> <TMPL_VAR NAME=AUTHOR></small>
           <p style="display: none;"><TMPL_VAR NAME=CONTENT></p>
         </div>
-      </TMPL_LOOP>
-    </div>
-    <div class="tg">
-      <h4 style="display: none;"><TMPL_VAR NAME=TG></h4>
-      <TMPL_LOOP NAME=TG_NEWS>
-      <div><TMPL_VAR NAME=CONTENT></div>
-      <p style="display: none;"><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></p>
       </TMPL_LOOP>
     </div>
     <div class="sl">
