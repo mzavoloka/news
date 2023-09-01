@@ -2,54 +2,131 @@
 <meta charset="UTF-8"/>
 <meta http-equiv="refresh" content="30" />
 <head>
-    <title>Все новости</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Все новости</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-    <!-- Telegram messages styles -->
-    <link href="//telegram.org/css/font-roboto.css?1" rel="stylesheet" type="text/css">
-    <link href="//telegram.org/css/widget-frame.css?66" rel="stylesheet" media="screen">
-    <link href="//telegram.org/css/telegram-web.css?37" rel="stylesheet" media="screen">
+  <!-- Telegram messages styles -->
+  <link href="//telegram.org/css/font-roboto.css?1" rel="stylesheet" type="text/css">
+  <link href="//telegram.org/css/widget-frame.css?66" rel="stylesheet" media="screen">
+  <link href="//telegram.org/css/telegram-web.css?37" rel="stylesheet" media="screen">
+<style>
+body {
+  background-color: wheat;
+}
 
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.yt {
+  /* outer grid (wrapper) rules */
+  grid-column: 1 / 4;
+  /* inner grid rules */
+  display: grid;
+  grid-template-columns: repeat(22, 200px);
+  grid-template-rows: repeat(1, 150px);
+}
+.yt div.ytitem {
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+.tg {
+  /* outer grid (wrapper) rules */
+  grid-column: 1 / 2;
+  /* inner grid rules */
+  display: grid;
+  grid-template-columns: repeat(3, 450px);
+  /*grid-template-rows: repeat(1, 400px);*/
+  align-self: start;
+}
+.tgme_widget_message_bubble {
+  margin: 0;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.sl {
+  /* outer grid (wrapper) rules */
+  grid-column: 3 / 3;
+  /* inner grid rules */
+  /*display: grid;
+  grid-template-columns: repeat(22, 200px);
+  grid-template-rows: repeat(1, 150px);*/
+}
+.sl img {
+  max-width: 500px;
+}
+.sl div.slitem {
+  /*border: 1px solid black;*/
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  /*background-color: beige;*/
+  background-color: white;
+}
+
+.ot {
+  /* outer grid (wrapper) rules */
+  grid-column: 4 / 4;
+  /* inner grid rules */
+  /*display: grid;
+  grid-template-columns: repeat(22, 200px);
+  grid-template-rows: repeat(1, 150px);*/
+}
+.ot div.otitem {
+  /*border: 1px solid black;*/
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  /*background-color: papayawhip;*/
+  background-color: white;
+}
+</style>
 </head>
 <body>
-  <table width="100%" style="table-layout:fixed;">
-    <tr>
-      <td width="300" align="left" valign="top">
-        <h1><TMPL_VAR NAME=SL></h1>
-        <TMPL_LOOP NAME=SL_NEWS>
-          <h4>Date: <TMPL_VAR NAME=HDATE>
-            Author: <TMPL_VAR NAME=AUTHOR>
-            Title: <TMPL_VAR NAME=TITLE>
-            Url: <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></h4>
-          <p><TMPL_VAR NAME=CONTENT></p>
-        </TMPL_LOOP>
-      </td>
-      <td width="300" align="left" valign="top">
-        <h1><TMPL_VAR NAME=TG></h1>
-        <TMPL_LOOP NAME=TG_NEWS>
-          <h4>Date: <TMPL_VAR NAME=HDATE>
-            Author: <TMPL_VAR NAME=AUTHOR>
-            Title: <TMPL_VAR NAME=TITLE>
-            Url: <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></h4>
-          <p><TMPL_VAR NAME=CONTENT></p>
-        </TMPL_LOOP>
-      </td>
-      <td width="300" align="left" valign="top">
-        <h1><TMPL_VAR NAME=YT></h1>
-        <TMPL_LOOP NAME=YT_NEWS>
-          <p><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></br>
-          <TMPL_VAR NAME=AUTHOR> -- <TMPL_VAR NAME=TITLE></p>
+  <div class="wrapper">
+    <div class="yt">
+      <h4 style="display: none;"><TMPL_VAR NAME=YT></h4>
+      <TMPL_LOOP NAME=YT_NEWS>
+        <div class="ytitem">
+          <small><a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a><TMPL_VAR NAME=HDATE> <TMPL_VAR NAME=AUTHOR></small>
           <p style="display: none;"><TMPL_VAR NAME=CONTENT></p>
-        </TMPL_LOOP>
-      </td>
-      <td width="300" align="left" valign="top">
-        <h1><TMPL_VAR NAME=OT></h1>
-        <TMPL_LOOP NAME=OT_NEWS>
-          <p><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></br>
-          <TMPL_VAR NAME=AUTHOR> -- <TMPL_VAR NAME=TITLE></p>
-          <p><TMPL_VAR NAME=CONTENT></p>
-        </TMPL_LOOP>
-      </td>
+        </div>
+      </TMPL_LOOP>
+    </div>
+    <div class="tg">
+      <h4 style="display: none;"><TMPL_VAR NAME=TG></h4>
+      <TMPL_LOOP NAME=TG_NEWS>
+      <div><TMPL_VAR NAME=CONTENT></div>
+      <p style="display: none;"><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></p>
+      </TMPL_LOOP>
+    </div>
+    <div class="sl">
+      <p style="display: none;">><TMPL_VAR NAME=SL></p>
+      <TMPL_LOOP NAME=SL_NEWS>
+        <div class="slitem">
+          <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a> <TMPL_VAR NAME=HDATE></br>
+          <small><TMPL_VAR NAME=CONTENT></small>
+        </div>
+        <p style="display: none;"><TMPL_VAR NAME=AUTHOR></p>
+      </TMPL_LOOP>
+    </div>
+    <div class="ot">
+      <p style="display: none;">><TMPL_VAR NAME=OT></p>
+      <TMPL_LOOP NAME=OT_NEWS>
+        <div class="otitem">
+          <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a> <TMPL_VAR NAME=HDATE></br>
+          <small><TMPL_VAR NAME=CONTENT></small>
+        </div>
+        <p style="display: none;"><TMPL_VAR NAME=AUTHOR></p>
+      </TMPL_LOOP>
+    </div>
+  </div>
       <!--
       <td width="300" align="left" valign="top">
         <h1><TMPL_VAR NAME=RB></h1>

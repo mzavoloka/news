@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use HTML::Template;
 use DBI;
 use strict;
@@ -27,7 +28,7 @@ for my $rssurl ( keys %$feeds ) {
             url,
             feedurl,
             pubDate,
-            datetime( pubDate, 'unixepoch' ) as hdate,
+            datetime( pubDate, 'unixepoch', 'localtime' ) as hdate,
             content
         FROM rss_item
         WHERE feedurl = ?
@@ -64,6 +65,19 @@ my $tmpl = HTML::Template->new(filename => 'template.tmpl');
 
 
 $tmpl->param(
+    TG => 'Telegram',
+    TG_NEWS => [
+        map {
+            {
+                hdate => $_->{hdate},
+                content => $_->{content},
+                url     => $_->{url},
+            }
+        } (
+            sort { $b->{pubDate} <=> $a->{pubDate} }
+            values %$tgitems
+        )[0..200]
+    ],
     SL => 'Smartlab',
     SL_NEWS => [
         map {
@@ -71,26 +85,14 @@ $tmpl->param(
                 hdate => $_->{hdate},
                 author => $_->{author},
                 title => $_->{title},
-                content => substr($_->{content},0,1000),
+                content => $_->{content} eq $_->{title} ? '' : $_->{content},
+                #content => substr($_->{content},0,1000),
                 url     => $_->{url},
             }
-        }
-        sort { $b->{pubDate} <=> $a->{pubDate} }
-        values %$slitems
-    ],
-    TG => 'Telegram',
-    TG_NEWS => [
-        map {
-            {
-                hdate => $_->{hdate},
-                author => $_->{author},
-                title => $_->{title},
-                content => $_->{content},
-                url     => $_->{url},
-            }
-        }
-        sort { $b->{pubDate} <=> $a->{pubDate} }
-        values %$tgitems
+        } (
+            sort { $b->{pubDate} <=> $a->{pubDate} }
+            values %$slitems
+        )[0..100]
     ],
     YT => 'Youtube',
     YT_NEWS => [
@@ -102,9 +104,10 @@ $tmpl->param(
                 content => substr($_->{content},0,300),
                 url     => $_->{url},
             }
-        }
-        sort { $b->{pubDate} <=> $a->{pubDate} }
-        values %$ytitems
+        } (
+            sort { $b->{pubDate} <=> $a->{pubDate} }
+            values %$ytitems
+        )[0..20]
     ],
     OT => 'Other',
     OT_NEWS => [
@@ -116,9 +119,10 @@ $tmpl->param(
                 content => $_->{content},
                 url     => $_->{url},
             }
-        }
-        sort { $b->{pubDate} <=> $a->{pubDate} }
-        values %$otitems
+        } (
+            sort { $b->{pubDate} <=> $a->{pubDate} }
+            values %$otitems
+        )[0..200]
     ],
     #RB => 'RBC',
     #RB_NEWS => [
