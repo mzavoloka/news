@@ -54,6 +54,18 @@ body {
   max-height: none;
 }
 
+div.recent > div.tgme_widget_message_bubble {
+  background-color: lightgreen;
+}
+
+div.recent2 > div.tgme_widget_message_bubble {
+  background-color: aquamarine;
+}
+
+div.recentday > div.tgme_widget_message_bubble {
+  background-color: lightblue;
+}
+
 .yt {
   /* outer grid (wrapper) rules */
   grid-column-start: 2;
@@ -75,6 +87,18 @@ body {
   margin-bottom: 10px;
   background-color: white;
   overflow: clip;
+}
+
+.yt div.recent {
+  background-color: lightgreen;
+}
+
+.yt div.recent2 {
+  background-color: aquamarine;
+}
+
+.yt div.recentday {
+  background-color: lightblue;
 }
 
 .sl {
@@ -101,10 +125,23 @@ body {
   margin-bottom: 10px;
   /*background-color: beige;*/
   background-color: white;
-  max-height: 675px;
+  max-height: 70px;
   /*max-width: 600px;*/
   overflow: clip;
 }
+
+.sl div.recent {
+  background-color: lightgreen;
+}
+
+.sl div.recent2 {
+  background-color: aquamarine;
+}
+
+.sl div.recentday {
+  background-color: lightblue;
+}
+
 
 .slitem:hover {
   overflow: visible;
@@ -132,6 +169,31 @@ body {
   margin-bottom: 10px;
   /*background-color: papayawhip;*/
   background-color: white;
+  max-height: 70px;
+  overflow: clip;
+}
+
+.ot div.otitem:hover {
+  overflow: visible;
+  max-height: none;
+}
+
+.ot div.recent {
+  background-color: lightgreen;
+}
+
+.ot div.recent2 {
+  background-color: aquamarine;
+}
+
+.ot div.recentday {
+  background-color: lightblue;
+}
+
+#page_gen_time {
+  background-color: black;
+  color: lime;
+  font-weight: bolder;
 }
 </style>
 </head>
@@ -140,33 +202,35 @@ body {
     <div class="tg">
       <h4 style="display: none;"><TMPL_VAR NAME=TG></h4>
       <TMPL_LOOP NAME=TG_NEWS>
-      <div class="tgitem"><TMPL_VAR NAME=CONTENT></div>
+      <div class="tgitem <TMPL_VAR NAME=RECENCY>"><TMPL_VAR NAME=CONTENT></div>
       <p style="display: none;"><TMPL_VAR NAME=HDATE> <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=URL></a></p>
       </TMPL_LOOP>
     </div>
     <div class="yt">
       <h4 style="display: none;"><TMPL_VAR NAME=YT></h4>
       <TMPL_LOOP NAME=YT_NEWS>
-        <div class="ytitem">
+        <div class="ytitem <TMPL_VAR NAME=RECENCY>">
           <small><a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a><TMPL_VAR NAME=HDATE> <TMPL_VAR NAME=AUTHOR></small>
           <p style="display: none;"><TMPL_VAR NAME=CONTENT></p>
         </div>
       </TMPL_LOOP>
     </div>
     <div class="sl">
-      <p style="display: none;">><TMPL_VAR NAME=SL></p>
+      <p style="display: none;"><TMPL_VAR NAME=SL></p>
       <TMPL_LOOP NAME=SL_NEWS>
-        <div class="slitem">
-          <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a> <TMPL_VAR NAME=HDATE></br>
+        <div class="slitem <TMPL_VAR NAME=RECENCY>">
+          <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a>
+          <small><b><TMPL_VAR NAME=AUTHOR></b>&nbsp;<TMPL_VAR NAME=HDATE></small></br>
           <small><TMPL_VAR NAME=CONTENT></small>
         </div>
-        <p style="display: none;"><TMPL_VAR NAME=AUTHOR></p>
+        <p style="display: none;"></p>
       </TMPL_LOOP>
     </div>
     <div class="ot">
-      <p style="display: none;">><TMPL_VAR NAME=OT></p>
+      <p style="display: none;"><TMPL_VAR NAME=OT></p>
+      <div class="otitem" id="page_gen_time"><tt>Gen <TMPL_VAR NAME=PAGE_GEN_TIME></br>Cur <span id="time"></span></tt></div>
       <TMPL_LOOP NAME=OT_NEWS>
-        <div class="otitem">
+        <div class="otitem <TMPL_VAR NAME=RECENCY>">
           <a href="<TMPL_VAR NAME=URL>"><TMPL_VAR NAME=TITLE></a> <TMPL_VAR NAME=HDATE></br>
           <small><TMPL_VAR NAME=CONTENT></small>
         </div>
@@ -185,4 +249,11 @@ body {
       </td>-->
     </tr>
   </table>
+  <script>
+    window.onload = displayClock();
+    function displayClock(){
+      document.getElementById("time").textContent = new Date().toLocaleString('sv');
+      setTimeout(displayClock, 1000);
+    }
+  </script>
 </body>
