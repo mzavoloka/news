@@ -90,9 +90,9 @@ $tmpl->param(
                 recency => $_->{recency},
             }
         } (
-            sort { $b->{pubDate} <=> $a->{pubDate} }
+            sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
             values %$tgitems
-        )[0..100]
+        )[0..150]
     ],
     SL => 'Smartlab',
     SL_NEWS => [
@@ -107,7 +107,7 @@ $tmpl->param(
                 recency => $_->{recency},
             }
         } (
-            sort { $b->{pubDate} <=> $a->{pubDate} }
+            sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
             values %$slitems
         )[0..200]
     ],
@@ -123,7 +123,7 @@ $tmpl->param(
                 recency => $_->{recency},
             }
         } (
-            sort { $b->{pubDate} <=> $a->{pubDate} }
+            sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
             values %$ytitems
         )[0..10]
     ],
@@ -139,7 +139,7 @@ $tmpl->param(
                 recency => $_->{recency},
             }
         } (
-            sort { $b->{pubDate} <=> $a->{pubDate} }
+            sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
             values %$otitems
         )[0..100]
     ],
@@ -154,7 +154,7 @@ $tmpl->param(
     #            url     => $_->{url},
     #        }
     #    }
-    #    sort { $b->{pubDate} <=> $a->{pubDate} }
+    #    sort { $b->{pubDate} <=> $a->{pubDate} and $a->{url} or $b->{url} }
     #    values %$rbitems
     #],
 );
