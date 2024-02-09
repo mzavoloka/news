@@ -15,37 +15,20 @@ use Data::Dumper;
 #BEGIN { push @INC, '.' }
 #use alphadumper;
 
-my $d = HTTP::Daemon->new(
-    LocalAddr => 'localhost',
-    LocalPort => 9000,
-) or die;
+use CGI::Fast
+    socket_path => '*:9090',
+    listen_queue => 5;
 
-say 'URL '.$d->url;
-while ( my $c = $d->accept ) {
-    while ( my $r = $c->get_request ) {
-        if ( $r->uri->path eq '/news' ) {
-            $c->send_response(
-                HTTP::Response->new(
-                    200,
-                    'ok',
-                    undef,
-                    encode_utf8( gen_index() ),
-                )
-            );
-        }
-        else {
-            $c->send_error(RC_FORBIDDEN);
-        }
-    }
-    $c->close;
-    undef $c;
+while (my $q = CGI::Fast->new) {
+    print $q->header('text/html; charset=utf-8');
+    print( encode_utf8( gen_index() ) );
 }
 
 sub gen_index {
     my $dbh = DBI->connect(
-        "dbi:SQLite:dbname=$ENV{HOME}/.newsboat/cache.db",
-        '',
-        '',
+        "dbi:SQLite:dbname=/home/mikhail/.newsboat/cache.db",
+        '', # usr
+        '', # pwd
         { sqlite_string_mode => DBD_SQLITE_STRING_MODE_UNICODE_STRICT }
     ) or die "Couldn't connect: $@";
     #$dbh->trace(1);

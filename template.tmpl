@@ -22,7 +22,7 @@
         <h4 style="display: none;">Youtube</h4>
         [% FOREACH yt IN yt_news %]
           <div class="ytitem [% yt.recency %]">
-            <small><a href="[% yt.url %]">[% yt.title %]</a>[% yt.hdate %] [% ytauthor %]</small>
+            <small><a href="[% yt.url %]">[% yt.title %]</a>[% yt.hdate %] [% yt.author %]</small>
             <p style="display: none;">[% yt.content %]</p>
           </div>
         [% END %]
