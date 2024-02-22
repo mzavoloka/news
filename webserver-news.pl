@@ -11,6 +11,7 @@ use DBD::SQLite::Constants ':dbd_sqlite_string_mode';
 use DateTime;
 use Template;
 use Data::Dumper;
+use List::Util qw( min );
 
 #BEGIN { push @INC, '.' }
 #use alphadumper;
@@ -21,7 +22,10 @@ use CGI::Fast
 
 while (my $q = CGI::Fast->new) {
     print $q->header('text/html; charset=utf-8');
-    print( encode_utf8( gen_index() ) );
+    eval {
+        print encode_utf8( gen_index() );
+    };
+    if ( $@ ) { print $@ };
 }
 
 sub gen_index {
@@ -116,7 +120,7 @@ sub gen_index {
                 } (
                     sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
                     values %$tgitems
-                )[0..100]
+                )[0..min(100, keys(%$tgitems) - 1)]
             ],
             sl_news => [
                 map {
@@ -132,7 +136,7 @@ sub gen_index {
                 } (
                     sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
                     values %$slitems
-                )[0..100]
+                )[0..min(100, keys(%$slitems) - 1)]
             ],
             yt_news => [
                 map {
@@ -147,7 +151,7 @@ sub gen_index {
                 } (
                     sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
                     values %$ytitems
-                )[0..10]
+                )[0..min(10, keys(%$ytitems) - 1)]
             ],
             ot_news => [
                 map {
@@ -162,7 +166,7 @@ sub gen_index {
                 } (
                     sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
                     values %$otitems
-                )[0..100]
+                )[0..min(30, keys(%$otitems) - 1)]
             ],
         },
         \$html_output,
