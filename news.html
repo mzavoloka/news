@@ -1,0 +1,312 @@
+<html>
+  <meta charset="UTF-8"/>
+  <head>
+    <title>Все новости</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- Telegram messages styles -->
+    <link href="//telegram.org/css/font-roboto.css?1" rel="stylesheet" type="text/css">
+    <link href="//telegram.org/css/widget-frame.css?66" rel="stylesheet" media="screen">
+    <link href="//telegram.org/css/telegram-web.css?37" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div id="tg" class="tg">
+      </div>
+      <div id="yt" class="yt">
+      </div>
+      <div id="sl" class="sl">
+      </div>
+      <div id="ot" class="ot">
+        <h4 style="display: none;">Others</h4>
+      </div>
+    </div>
+  </body>
+  <script>
+function refreshTG() {
+  fetch('http://localhost/news/allitems')
+    .then((res) => res.json())
+    .then((json) => refreshItems(json))
+}
+
+const tgdiv = document.getElementById('tg');
+const ytdiv = document.getElementById('yt');
+const sldiv = document.getElementById('sl');
+const otdiv = document.getElementById('ot');
+
+function refreshItems(allitems) {
+  tgdiv.replaceChildren();
+  for ( var tgitem of allitems.tg_news ) {
+    tgdiv.append(createTgItemDiv(tgitem));
+  }
+  ytdiv.replaceChildren();
+  for ( var ytitem of allitems.yt_news ) {
+    ytdiv.append(createYtItemDiv(ytitem));
+  }
+  sldiv.replaceChildren();
+  for ( var slitem of allitems.sl_news ) {
+    sldiv.append(createSlItemDiv(slitem));
+  }
+  otdiv.replaceChildren();
+  for ( var otitem of allitems.ot_news ) {
+    otdiv.append(createOtItemDiv(otitem));
+  }
+}
+
+function createTgItemDiv(tgitem) {
+  tgitemdiv = document.createElement('div');
+  tgitemdiv.classList.add('tgitem');
+  tgitemdiv.classList.add(tgitem.recency);
+  tgitemdiv.insertAdjacentHTML('beforeend', tgitem.content);
+  return tgitemdiv;
+}
+
+function createYtItemDiv(ytitem) {
+  ytitemdiv = document.createElement('div');
+  ytitemdiv.classList.add('ytitem');
+  ytitemdiv.classList.add(ytitem.recency);
+
+  var s = document.createElement('small');
+
+  var a = document.createElement('a');
+  a.setAttribute('href', ytitem.url);
+  a.innerHTML = ytitem.title;
+
+  s.append(a);
+  s.insertAdjacentHTML('beforeend', ytitem.hdate + ytitem.author);
+
+  ytitemdiv.append(s);
+  return ytitemdiv;
+}
+
+function createSlItemDiv(slitem) {
+  slitemdiv = document.createElement('div');
+  slitemdiv.classList.add('slitem');
+  slitemdiv.classList.add(slitem.recency);
+
+  var a = document.createElement('a');
+  a.setAttribute('href', slitem.url);
+  a.innerHTML = slitem.title;
+
+  slitemdiv.append(a);
+
+  slitemdiv.insertAdjacentHTML(
+    'beforeend',
+    '<small><b>' + slitem.author + '</b> ' + slitem.hdate + '</small></br>' +
+    '<small>'+slitem.content+'</small>'
+  );
+
+  return slitemdiv;
+}
+
+function createOtItemDiv(otitem) {
+  otitemdiv = document.createElement('div');
+  otitemdiv.classList.add('otitem');
+  otitemdiv.classList.add(otitem.recency);
+
+  var a = document.createElement('a');
+  a.setAttribute('href', otitem.url);
+  a.innerHTML = otitem.title;
+
+  otitemdiv.append(a);
+
+  otitemdiv.insertAdjacentHTML(
+    'beforeend',
+    ' ' + otitem.hdate + '</br>' +
+    '<small>'+otitem.content+'</small>'
+  );
+
+  return otitemdiv;
+}
+
+refreshTG();
+setInterval(() => refreshTG(), 5000);
+  </script>
+  <style>
+body {
+  background-color: wheat;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1350px 600px 570px;
+  grid-template-rows: 130px max-content;
+  gap: 3px;
+}
+
+.tg {
+  /* outer grid (wrapper) rules */
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  /*grid-column: 1 / 2;
+  grid-row: 1 / 2*/
+  /* inner grid rules */
+  display: grid;
+  grid-template-columns: repeat(3, 450px);
+  /*grid-template-rows: repeat(1, 400px);*/
+  /*grid-template-rows: 200px;*/
+  /*grid-auto-rows: 400px;*/
+  align-self: start;
+}
+/*.tg:hover {
+}*/
+.tgme_widget_message_bubble {
+  margin: 0;
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.tgitem {
+  overflow: clip;
+  max-height: 500px;
+}
+.tgitem:hover {
+  overflow: visible;
+  max-height: none;
+}
+
+div.recent > div.tgme_widget_message_bubble {
+  background-color: lightgreen;
+}
+
+div.recent2 > div.tgme_widget_message_bubble {
+  background-color: aquamarine;
+}
+
+div.recentday > div.tgme_widget_message_bubble {
+  background-color: lightblue;
+}
+
+.yt {
+  /* outer grid (wrapper) rules */
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  max-width: 1200px;
+  /*grid-column: 3 / 4;
+  grid-row: 1;*/
+  /* inner grid rules */
+  display: grid;
+  grid-template-columns: repeat(6, 200px);
+  grid-template-rows: repeat(1, 130px);
+  overflow: clip;
+}
+.yt div.ytitem {
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  background-color: white;
+  overflow: clip;
+}
+
+.yt div.recent {
+  background-color: lightgreen;
+}
+
+.yt div.recent2 {
+  background-color: aquamarine;
+}
+
+.yt div.recentday {
+  background-color: lightblue;
+}
+
+.sl {
+  /* outer grid (wrapper) rules */
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  /*grid-column: 3 / 3;
+  grid-row: 2;*/
+  /* inner grid rules */
+  /*display: grid;
+  grid-template-columns: repeat(22, 200px);
+  grid-template-rows: repeat(1, 150px);*/
+  overflow: clip;
+}
+.sl img {
+  max-width: 600px;
+}
+.slitem {
+  /*border: 1px solid black;*/
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  /*background-color: beige;*/
+  background-color: white;
+  max-height: 70px;
+  /*max-width: 600px;*/
+  overflow: clip;
+}
+
+.sl div.recent {
+  background-color: lightgreen;
+}
+
+.sl div.recent2 {
+  background-color: aquamarine;
+}
+
+.sl div.recentday {
+  background-color: lightblue;
+}
+
+
+.slitem:hover {
+  overflow: visible;
+  max-height: none;
+}
+
+.ot {
+  /* outer grid (wrapper) rules */
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  /*max-width: 600px;*/
+  /*grid-column: 4 / 4;
+  grid-row: 2;*/
+  /* inner grid rules */
+  /*display: grid;
+  grid-template-columns: repeat(22, 200px);
+  grid-template-rows: repeat(1, 150px);*/
+}
+.ot div.otitem {
+  /*border: 1px solid black;*/
+  padding: 5px;
+  margin: 5px;
+  margin-bottom: 10px;
+  /*background-color: papayawhip;*/
+  background-color: white;
+  max-height: 70px;
+  overflow: clip;
+}
+
+.ot div.otitem:hover {
+  overflow: visible;
+  max-height: none;
+}
+
+.ot div.recent {
+  background-color: lightgreen;
+}
+
+.ot div.recent2 {
+  background-color: aquamarine;
+}
+
+.ot div.recentday {
+  background-color: lightblue;
+}
+
+#page_gen_time {
+  background-color: black;
+  color: lime;
+  font-weight: bolder;
+}
+  </style>
+</html>

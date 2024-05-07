@@ -1,11 +1,8 @@
 #!/usr/bin/perl
 use strict;
 use feature 'say';
-use HTTP::Daemon;
-use HTTP::Status;
-use HTTP::Response;
-use JSON qw( encode_json );
 use Encode qw( encode_utf8 );
+use JSON qw( encode_json decode_json );
 use DBI;
 use DBD::SQLite::Constants ':dbd_sqlite_string_mode';
 use DateTime;
@@ -21,14 +18,36 @@ use CGI::Fast
     listen_queue => 5;
 
 while (my $q = CGI::Fast->new) {
-    print $q->header('text/html; charset=utf-8');
     eval {
-        print encode_utf8( gen_index() );
+        process_request($q);
     };
     if ( $@ ) { print $@ };
 }
 
-sub gen_index {
+exit;
+
+sub process_request {
+    my ( $q ) = @_;
+
+    if ( $q->script_name =~ /^\/news\/*$/ ) {
+        print $q->header('text/html; charset=utf-8');
+        print encode_utf8( gen_index() );
+    }
+    elsif ( $q->script_name =~ /^\/news\/+allitems\/*$/ ) {
+        print $q->header('application/json; charset=utf-8');
+        print encode_json( allitems() );
+    }
+    elsif ( $q->script_name =~ /^\/news.html\/*$/ ) {
+        print $q->header('text/html; charset=utf-8');
+        open FH, '<', 'news.html';
+        print while <FH>;
+    }
+    else {
+        print "Unknown route ".$q->script_name;
+    }
+}
+
+sub allitems {
     my $dbh = DBI->connect(
         "dbi:SQLite:dbname=/home/mikhail/.newsboat/cache.db",
         '', # usr
@@ -103,72 +122,76 @@ sub gen_index {
 
     my $now = DateTime->now(time_zone => $local_tz);
 
+    return {
+        page_gen_time => $now->ymd." ".$now->hms,
+        tg_news => [
+            map {
+                {
+                    hdate   => $_->{hdate},
+                    content => $_->{content},
+                    url     => $_->{url},
+                    recency => $_->{recency},
+                }
+            } (
+                sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
+                values %$tgitems
+            )[0..min(100, keys(%$tgitems) - 1)]
+        ],
+        sl_news => [
+            map {
+                {
+                    hdate    => $_->{hdate},
+                    author   => ( $_->{author} =~ /https:..smart-lab.ru.my.([^\/]+).blog/ ),
+                    title    => $_->{title},
+                    content  => $_->{content} eq $_->{title} ? '' : $_->{content},
+                    #content => substr($_->{content},0,1000),
+                    url      => $_->{url},
+                    recency  => $_->{recency},
+                }
+            } (
+                sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
+                values %$slitems
+            )[0..min(100, keys(%$slitems) - 1)]
+        ],
+        yt_news => [
+            map {
+                {
+                    hdate   => $_->{hdate},
+                    author  => $_->{author},
+                    title   => $_->{title},
+                    content => substr($_->{content},0,300),
+                    url     => $_->{url},
+                    recency => $_->{recency},
+                }
+            } (
+                sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
+                values %$ytitems
+            )[0..min(10, keys(%$ytitems) - 1)]
+        ],
+        ot_news => [
+            map {
+                {
+                    hdate   => $_->{hdate},
+                    author  => $_->{author},
+                    title   => $_->{title},
+                    content => $_->{content},
+                    url     => $_->{url},
+                    recency => $_->{recency},
+                }
+            } (
+                sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
+                values %$otitems
+            )[0..min(30, keys(%$otitems) - 1)]
+        ],
+    };
+}
+
+sub gen_index {
     my $tt = Template->new( { ENCODING => 'utf8' } );
     my $html_output = '';
     $tt->process(
         'template.tmpl',
-        {
-            page_gen_time => $now->ymd." ".$now->hms,
-            tg_news => [
-                map {
-                    {
-                        hdate   => $_->{hdate},
-                        content => $_->{content},
-                        url     => $_->{url},
-                        recency => $_->{recency},
-                    }
-                } (
-                    sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
-                    values %$tgitems
-                )[0..min(100, keys(%$tgitems) - 1)]
-            ],
-            sl_news => [
-                map {
-                    {
-                        hdate    => $_->{hdate},
-                        author   => ( $_->{author} =~ /https:..smart-lab.ru.my.([^\/]+).blog/ ),
-                        title    => $_->{title},
-                        content  => $_->{content} eq $_->{title} ? '' : $_->{content},
-                        #content => substr($_->{content},0,1000),
-                        url      => $_->{url},
-                        recency  => $_->{recency},
-                    }
-                } (
-                    sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
-                    values %$slitems
-                )[0..min(100, keys(%$slitems) - 1)]
-            ],
-            yt_news => [
-                map {
-                    {
-                        hdate   => $_->{hdate},
-                        author  => $_->{author},
-                        title   => $_->{title},
-                        content => substr($_->{content},0,300),
-                        url     => $_->{url},
-                        recency => $_->{recency},
-                    }
-                } (
-                    sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
-                    values %$ytitems
-                )[0..min(10, keys(%$ytitems) - 1)]
-            ],
-            ot_news => [
-                map {
-                    {
-                        hdate   => $_->{hdate},
-                        author  => $_->{author},
-                        title   => $_->{title},
-                        content => $_->{content},
-                        url     => $_->{url},
-                        recency => $_->{recency},
-                    }
-                } (
-                    sort { $b->{pubDate} <=> $a->{pubDate} or $a->{url} cmp $b->{url} }
-                    values %$otitems
-                )[0..min(30, keys(%$otitems) - 1)]
-            ],
-        },
+        allitems(),
         \$html_output,
         { binmode => ':utf8' }
     );
