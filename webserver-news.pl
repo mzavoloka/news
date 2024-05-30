@@ -127,6 +127,7 @@ sub allitems {
         tg_news => [
             map {
                 {
+                    id      => $_->{id},
                     hdate   => $_->{hdate},
                     content => $_->{content},
                     url     => $_->{url},
@@ -140,6 +141,7 @@ sub allitems {
         sl_news => [
             map {
                 {
+                    id      => $_->{id},
                     hdate    => $_->{hdate},
                     author   => ( $_->{author} =~ /https:..smart-lab.ru.my.([^\/]+).blog/ ),
                     title    => $_->{title},
@@ -156,6 +158,7 @@ sub allitems {
         yt_news => [
             map {
                 {
+                    id      => $_->{id},
                     hdate   => $_->{hdate},
                     author  => $_->{author},
                     title   => $_->{title},
@@ -171,6 +174,7 @@ sub allitems {
         ot_news => [
             map {
                 {
+                    id      => $_->{id},
                     hdate   => $_->{hdate},
                     author  => $_->{author},
                     title   => $_->{title},

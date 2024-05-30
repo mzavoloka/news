@@ -1,5 +1,7 @@
+import { setRefresher } from "./modules/refresher.mjs";
+
 function refreshTG() {
-  fetch('http://localhost/news/allitems')
+  fetch('news/allitems')
     .then((res) => res.json())
     .then((json) => refreshItems(json))
 }
@@ -29,7 +31,7 @@ function refreshItems(allitems) {
 }
 
 function createTgItemDiv(tgitem) {
-  tgitemdiv = document.createElement('div');
+  var tgitemdiv = document.createElement('div');
   tgitemdiv.classList.add('tgitem');
   tgitemdiv.classList.add(tgitem.recency);
   tgitemdiv.insertAdjacentHTML('beforeend', tgitem.content);
@@ -37,7 +39,7 @@ function createTgItemDiv(tgitem) {
 }
 
 function createYtItemDiv(ytitem) {
-  ytitemdiv = document.createElement('div');
+  var ytitemdiv = document.createElement('div');
   ytitemdiv.classList.add('ytitem');
   ytitemdiv.classList.add(ytitem.recency);
 
@@ -55,7 +57,7 @@ function createYtItemDiv(ytitem) {
 }
 
 function createSlItemDiv(slitem) {
-  slitemdiv = document.createElement('div');
+  var slitemdiv = document.createElement('div');
   slitemdiv.classList.add('slitem');
   slitemdiv.classList.add(slitem.recency);
 
@@ -75,7 +77,7 @@ function createSlItemDiv(slitem) {
 }
 
 function createOtItemDiv(otitem) {
-  otitemdiv = document.createElement('div');
+  var otitemdiv = document.createElement('div');
   otitemdiv.classList.add('otitem');
   otitemdiv.classList.add(otitem.recency);
 
@@ -96,3 +98,4 @@ function createOtItemDiv(otitem) {
 
 refreshTG();
 setInterval(() => refreshTG(), 5000);
+setRefresher();
