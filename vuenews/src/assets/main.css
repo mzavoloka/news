@@ -1,17 +1,18 @@
 @import './base.css';
+@import './widget-frame.css';
+@import './telegram-web.css';
 
-/*
 a,
 .green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  /*text-decoration: none;*/
+  color: hsla(160, 100%, 0%, 1);
   transition: 0.4s;
-  padding: 3px;
+  /*padding: 3px;*/
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: hsla(160, 100%, 0%, 0.05);
   }
 }
 
@@ -24,22 +25,36 @@ a,
   #app {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    /*padding: 0 2rem;*/
   }
 }
-*/
 
+.marked_as_read {
+  filter: opacity(0.4);
+}
+.marked_as_read:hover {
+  filter: opacity(1); /* cancel opacity for marked_as_read to prevent nearby elements to appear behind hovered element */
+}
+
+/*
 body {
   background-color: wheat;
 }
+*/
 
 /*+------------------------------------------------------------------+
     Main grid
   +------------------------------------------------------------------+*/
 .wrapper {
   display: grid;
-  grid-template-columns: 1350px 600px 570px;
-  grid-template-rows: 130px max-content;
+  --tg-columns-num: 4;
+  --tg-item-width: 400px;
+  grid-template-columns: 1600px 630px 630px;
+  --yt-rows-num: 2;
+  --yt-item-height: 130px;
+  --yt-item-width: 195px;
+  --yt-section-height: 260px;
+  grid-template-rows: var(--yt-section-height) max-content;
   gap: 3px;
   padding-left: 5px;
 }
@@ -53,7 +68,7 @@ body {
   grid-row-end: 2;
   /* inner grid rules */
   display: grid;
-  grid-template-columns: repeat(3, 450px);
+  grid-template-columns: repeat(var(--tg-columns-num), var(--tg-item-width));
   align-self: start;
 }
 
@@ -66,9 +81,9 @@ body {
   max-width: 1200px;
   /* inner grid rules */
   display: grid;
-  grid-template-columns: repeat(6, 200px);
-  grid-template-rows: repeat(1, 130px);
-  overflow: clip;
+  grid-template-columns: repeat(6, var(--yt-item-width) );
+  grid-template-rows: repeat(var(--yt-rows-num), var(--yt-item-height) );
+  /*overflow: clip;*/
 }
 
 .sl {
@@ -110,28 +125,28 @@ body {
   margin-right: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: 1px solid darkblue;
-  background-color: lightblue;
+  /*border: 1px solid darkblue;*/
+  /*background-color: lightblue;*/
   max-width: none;
 }
 .yt .ytitem {
   padding: 5px;
   margin: 5px;
   margin-bottom: 10px;
-  background-color: white;
+  /*background-color: white;*/
   overflow: clip;
 }
 
 .yt .recent {
-  background-color: lightgreen;
+  /*background-color: lightgreen;*/
 }
 
 .yt .recent2 {
-  background-color: aquamarine;
+  /*background-color: aquamarine;*/
 }
 
 .yt .recentday {
-  background-color: lightblue;
+  /*background-color: lightblue;*/
 }
 
 /*
@@ -150,11 +165,11 @@ body {
   padding: 5px;
   margin: 5px;
   margin-bottom: 10px;
-  background-color: white;
-  max-height: 70px;
+  /*background-color: white;*/
+  max-height: 90px;
   overflow: clip;
-  border: 1px solid darkblue;
-  background-color: lightblue;
+  /*border: 1px solid darkblue;*/
+  /*background-color: lightblue;*/
 }
 
 
@@ -166,10 +181,14 @@ body {
 }
 
 .tgme_widget_message_bubble:hover, .ytitem:hover, .slitem:hover, .otitem:hover {
-  box-shadow: 3px 3px 3px darkblue;
+  box-shadow: 3px 3px 3px darkgrey;
   transform: translate3D(0,-3px,0); /*scale(1.00);*/
-  background-color: aliceblue;
-  transition: background-color 300ms linear;
+
+  /*
+  background-color: blue;
+  transition: background-color 100ms linear;
+  */
+  border: 1px solid black;
 }
 
 
@@ -179,8 +198,8 @@ body {
   margin: 5px;
   margin-bottom: 10px;
   /*background-color: papayawhip;*/
-  background-color: white;
-  max-height: 70px;
+  /*background-color: white;*/
+  max-height: 90px;
   overflow: clip;
 }
 
