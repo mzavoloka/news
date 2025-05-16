@@ -1,6 +1,6 @@
 News aggregator based on newsboat. Gathers news from many sources and shows them on one webpage in
 chronological order. 
-[Sample screenshot 2025-05-16](img/Screenshot_2025-05-16_20-11-02.png)
+![Sample screenshot 2025-05-16](img/Screenshot_2025-05-16_20-11-02.png?raw=true "Sample screenshot 2025-05-16")
 
 Each minute the running instance of newsboat https://github.com/newsboat/newsboat is gathering news
 to SQLite db file (usually present in ~/.newsboat/cache.db) via parsers converting html pages to RSS
