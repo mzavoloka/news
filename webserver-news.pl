@@ -2,16 +2,19 @@
 use strict;
 use feature 'say';
 use Encode qw( encode_utf8 );
-use JSON qw( encode_json decode_json );
+use JSON::XS qw( encode_json decode_json );
 use DBI;
 use DBD::SQLite::Constants ':dbd_sqlite_string_mode';
 use DateTime;
 use Template;
 use Data::Dumper;
 use List::Util qw( min );
+use File::HomeDir;
 
 #BEGIN { push @INC, '.' }
 #use alphadumper;
+
+my $homyak  = File::HomeDir->my_home;
 
 use CGI::Fast
     socket_path => '*:9090',
@@ -49,7 +52,7 @@ sub process_request {
 
 sub allitems {
     my $dbh = DBI->connect(
-        "dbi:SQLite:dbname=/home/mikhail/.newsboat/cache.db",
+        "dbi:SQLite:dbname=$homyak/.newsboat/cache.db",
         '', # usr
         '', # pwd
         { sqlite_string_mode => DBD_SQLITE_STRING_MODE_UNICODE_STRICT }

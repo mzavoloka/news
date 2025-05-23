@@ -7,17 +7,17 @@
   const otitems = ref([])
 
   onMounted(() => {
-    refreshTG()
-    setInterval(() => refreshTG(), 5000)
+    refreshAllItems()
+    setInterval(() => refreshAllItems(), 5000)
   })
 
-  function refreshTG() {
+  function refreshAllItems() {
     fetch('/news/allitems')
       .then((res) => res.json())
-      .then((json) => refreshItems(json))
+      .then((json) => setAllItems(json))
   }
 
-  function refreshItems(allitems) {
+  function setAllItems(allitems) {
     tgitems.value = allitems.tg_news.map( x => ({ ...x, marked_as_read: localStorage.getItem(x.id) }) )
     ytitems.value = allitems.yt_news.map( x => ({ ...x, marked_as_read: localStorage.getItem(x.id) }) )
     slitems.value = allitems.sl_news.map( x => ({ ...x, marked_as_read: localStorage.getItem(x.id) }) )

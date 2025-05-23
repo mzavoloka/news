@@ -10,8 +10,14 @@ to Vue app (that is calling 'allitems' method each 5 seconds). 'Mark all as read
 page puts items' ids to localstorage making them rendered as more opaque. Hovering mouse on top of
 any news card expands it.
 
-- TODO also make a screencast demo video?
-- TODO move newsboat config to this project
-- TODO put newsboat schema sample to this project
-- TODO move nginx config to this project
+To run on your machine, build docker image from project's folder:
+```
+sudo docker build -t news .
+```
+And then run container (will need vacant 8181 port on your machine):
+```
+sudo docker run -it -p 8181:80 news
+```
+Then the project will be availabe at http://localhost:8181/news/vue
+
 - TODO archive older html-only version

@@ -5,7 +5,7 @@ use feature 'say';
 BEGIN { push @INC, '.' }
 #use alphadumper;
 
-use JSON;
+use JSON::XS;
 use DateTime;
 use XML::RSS;
 
@@ -17,7 +17,7 @@ my $content = `curl --silent 'https://$domen/news/catalog.json'`
     or die "Empty curl output";
 
 #my $json = eval { JSON::decode_json( $content ) };
-my $json = eval { JSON->new->utf8->decode( $content ) };
+my $json = eval { JSON::XS->new->utf8->decode( $content ) };
 die "Error parsing 2ch response: $@" if $@;
 die "No threads found" unless $json->{threads}->@*;
 
@@ -38,8 +38,8 @@ map {
 }
 grep {
     not $_->{closed}
-    and ( $_->{posts_count} >= 50 and $_->{views} >= 2000
-          or $_->{views} >= 2300 )
+    and ( $_->{posts_count} >= 60 and $_->{views} >= 2300
+          or $_->{views} >= 2700 )
 } $json->{threads}->@*;
 
 # TODO suggested_source
