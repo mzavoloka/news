@@ -4,13 +4,17 @@ chronological order.
 ![Sample screenshot 2025-05-16](img/Screenshot_2025-05-16_20-11-02.png?raw=true "Sample screenshot 2025-05-16")
 
 ### Installation
-To run on your machine, build docker image from project's folder:
+To run on your machine, either pull pre-built image from dockerhub:
+```
+sudo docker image pull mzavoloka/news
+```
+...or build docker image from project's folder:
 ```
 sudo docker build -t news .
 ```
 And then run container (will need vacant 8181 port on your machine):
 ```
-sudo docker run -it -p 8181:80 news
+sudo docker run -it -p 8181:8181 news
 ```
 Then the project will be availabe at http://localhost:8181/news/vue
 
@@ -22,5 +26,7 @@ Perl script webserver-news.pl connects to cache.db file to form a JSON api metho
 to Vue app (that is calling 'allitems' method each 5 seconds). 'Mark all as read' button on top of the
 page puts items' ids to localstorage making them rendered as more opaque. Hovering mouse on top of
 any news card expands it.
+
+The list of RSS feeds may be configured in .newsboat/urls file.
 
 - TODO archive older html-only version

@@ -1,6 +1,6 @@
 # Recommended way to build and run:
 # sudo docker build -t news .
-# sudo docker run -it -p 8181:80 news
+# sudo docker run -it -p 8181:8181 news
 
 FROM archlinux
 
