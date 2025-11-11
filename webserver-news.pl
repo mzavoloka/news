@@ -111,7 +111,7 @@ sub allitems {
                 $tgitems->{$_} = $items->{$_};
                 $tgitems->{$_}{content} =~ s/(datetime="\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+00:00">)\d\d:\d\d/${1}$items->{$_}{hdate}/;
                 # enable opening tg links right away without going to t.me website
-                $tgitems->{$_}{content} =~ s!https?://t.me/(.+?)/(\d+?)!tg://resolve?domain=${1}&post=${2}!g;
+                $tgitems->{$_}{content} =~ s!https?://t.me/(.+?)/(\d+)(\?single)?!tg://resolve?domain=${1}&post=${2}!g;
             }
             elsif ( $rssurl =~ /smart-lab\./ ) {
                 $slitems->{$_} = $items->{$_};
