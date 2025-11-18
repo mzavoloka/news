@@ -135,6 +135,7 @@ body {
   margin-bottom: 10px;
   /*background-color: white;*/
   overflow: clip;
+  line-height: 100%;
 }
 
 .yt .recent {
