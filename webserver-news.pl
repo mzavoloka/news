@@ -107,7 +107,7 @@ sub allitems {
             elsif ( $rssurl =~ /tg\.i-c-a\.su/ ) {
                 next;
             }
-            elsif ( $rssurl =~ /tgchnl2rss/ ) {
+            elsif ( $rssurl =~ /telemetr2rss|tgstatchnl2rss|tgchnl2rss/ ) {
                 $tgitems->{$_} = $items->{$_};
                 $tgitems->{$_}{content} =~ s/(datetime="\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d\+00:00">)\d\d:\d\d/${1}$items->{$_}{hdate}/;
                 # enable opening tg links right away without going to t.me website

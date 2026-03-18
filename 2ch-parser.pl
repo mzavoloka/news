@@ -11,7 +11,7 @@ use XML::RSS;
 
 my $domen;
 $domen = '2ch.life';
-$domen = '2ch.hk';
+$domen = '2ch.hk'; # redirects to 2ch.org
 
 my $content = `curl --silent 'https://$domen/news/catalog.json'`
     or die "Empty curl output";
