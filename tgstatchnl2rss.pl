@@ -16,7 +16,7 @@ my $channel_name = $ARGV[0] or die "No channel name arg provided";
 my $channel_url = "https://tgstat.ru/channel/\@$channel_name";
 my $cmd = oneline " curl '$channel_url'
   --silent
-  --cookie-jar
+  --cookie-jar /tmp/tgstatchnl2rss-cookie-jar.txt
   --compressed
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0'
   -H 'Upgrade-Insecure-Requests: 1'";

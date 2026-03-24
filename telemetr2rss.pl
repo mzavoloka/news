@@ -15,9 +15,9 @@ my $strp = DateTime::Format::Strptime->new(
 
 my $channel_name = $ARGV[0] or die "No channel name arg provided";
 my $channel_url = "https://telemetr.me/content/\@$channel_name";
-my $cmd = ol" curl '$channel_url'
+my $cmd = ol"curl '$channel_url'
   --silent
-  --cookie-jar
+  --cookie-jar /tmp/telemetr2rss-cookie-jar.txt
   --compressed
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0'
   -H 'Upgrade-Insecure-Requests: 1'";
