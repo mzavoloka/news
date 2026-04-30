@@ -1,12 +1,13 @@
 #!/usr/bin/perl
 use v5.40;
 use utf8;
-use mylib::oneline qw(ol);
 use HTML::TreeBuilder;
 use XML::RSS;
 use Encode qw(encode_utf8 decode_utf8);
 use DateTime;
 use DateTime::Format::Strptime;
+
+sub ol($s) { $s =~ s/\s+/ /gr } # r modifier to return result
 
 my $strp = DateTime::Format::Strptime->new(
     pattern => '%d.%m.%Y %H:%M',

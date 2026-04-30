@@ -1,11 +1,12 @@
 #!/usr/bin/perl
 use v5.40;
-use mylib::oneline;
 use HTML::TreeBuilder;
 use XML::RSS;
 use Encode qw(encode_utf8 decode_utf8);
 use DateTime;
 use DateTime::Format::Strptime;
+
+sub ol($s) { $s =~ s/\s+/ /gr } # r modifier to return result
 
 my $strp = DateTime::Format::Strptime->new(
     pattern => '%Y %d %b, %H:%M',
@@ -14,7 +15,7 @@ my $strp = DateTime::Format::Strptime->new(
 
 my $channel_name = $ARGV[0] or die "No channel name arg provided";
 my $channel_url = "https://tgstat.ru/channel/\@$channel_name";
-my $cmd = oneline " curl '$channel_url'
+my $cmd = ol" curl '$channel_url'
   --silent
   --cookie-jar /tmp/tgstatchnl2rss-cookie-jar.txt
   --compressed
